@@ -3,6 +3,8 @@ import { apiService } from "../services/apiService";
 import useTodoList from "../store/useTodolist";
 
 export const useDelete = () => {
+  const [isError, setIsError] = useState(false);
+  const [setIsMutating] = useState(false);
   const { removeList } = useTodoList((state) => state);
 
   const deleteData = async (id) => {
