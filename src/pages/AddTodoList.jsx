@@ -1,12 +1,13 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useRef } from "react";
 import { useCreate } from "../hooks/useCreate";
 
 const AddTodoList = () => {
   const navigate = useNavigate();
   const formRef = useRef();
-  const { postData, isError, isMutating } = useCreate();
+  const { postData } = useCreate();
 
+  // Status options for the dropdown
   const optionStatus = [
     { label: "Belum", value: "belum" },
     { label: "Proses", value: "proses" },
@@ -16,6 +17,7 @@ const AddTodoList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Call API service to create a new todo item
       await postData({
         activity: formRef.current.activity.value,
         start_date: formRef.current.startdate.value,

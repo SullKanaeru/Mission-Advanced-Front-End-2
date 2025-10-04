@@ -2,14 +2,14 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL:
-    process.env.REACT_APP_API_BASE_URL ||
+    import.meta.env.VITE_API_BASE_URL ||
     "https://68d40690214be68f8c68234e.mockapi.io",
-  timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 10000,
+  timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || 10000,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    console.log("API Request:", config.method?.toUpperCase(), config.url);
+    // console.log("API Request:", config.method?.toUpperCase(), config.url);
     return config;
   },
   (error) => {
@@ -19,11 +19,11 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => {
-    console.log("API Response:", response.status, response.data);
+    // console.log("API Response:", response.status, response.data);
     return response;
   },
   (error) => {
-    console.log("API Error:", error.response?.status, error.message);
+    // console.log("API Error:", error.response?.status, error.message);
     return Promise.reject(error);
   }
 );

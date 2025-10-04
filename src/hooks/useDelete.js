@@ -1,16 +1,22 @@
-import { useState } from "react";
 import { apiService } from "../services/apiService";
+import useTodoList from "../store/useTodolist";
 
 export const useDelete = () => {
-  const [isError, setIsError] = useState(false);
-  const [isMutating, setIsMutating] = useState(false);
+  const { removeList } = useTodoList((state) => state);
 
   const deleteData = async (id) => {
     try {
       setIsMutating(true);
       setIsError(false);
-      const response = await apiService.delete(id);
-      return response;
+
+      // To debug the input parameters
+      console.log("ID to be deleted:", id);
+
+      // Call the API to delete the item
+      await apiService.delete(id);
+
+      // Update the local state by removing the item
+      removeList(id);
     } catch (e) {
       setIsError(true);
       throw e;
@@ -21,7 +27,5 @@ export const useDelete = () => {
 
   return {
     deleteData,
-    isError,
-    isMutating,
   };
 };

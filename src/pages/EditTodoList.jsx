@@ -1,43 +1,43 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useRef } from "react";
 import { useUpdate } from "../hooks/useUpdate";
+import useTodoList from "../store/useTodolist";
 
 const EditTodoList = ({ isEdit }) => {
   const navigate = useNavigate();
   const formRef = useRef();
   const { id } = useParams();
-  const { putData, getTodoById, selectedData, isError, isMutating } =
-    useUpdate();
+  const { putData } = useUpdate();
+  const { list } = useTodoList((state) => state);
 
+  // Status options for the dropdown
   const optionStatus = [
     { label: "Belum", value: "belum" },
     { label: "Proses", value: "proses" },
     { label: "Selesai", value: "selesai" },
   ];
-  useEffect(() => {
-    {
-      getTodoById(id);
-    }
-  }, [id]);
 
+  // Pre-fill form fields with existing data
   useEffect(() => {
-    if (selectedData && formRef.current) {
-      formRef.current.activity.value = selectedData.activity || "";
-      formRef.current.startdate.value = selectedData.start_date || "";
-      formRef.current.duedate.value = selectedData.due_date || "";
-      formRef.current.status.value = selectedData.status || "belum";
+    if (list[id] && formRef.current) {
+      formRef.current.activity.value = list[id].activity || "";
+      formRef.current.startdate.value = list[id].start_date || "";
+      formRef.current.duedate.value = list[id].due_date || "";
+      formRef.current.status.value = list[id].status || "belum";
     }
-  }, [selectedData]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Call API service to update a specific todo item
       await putData(id, {
         activity: formRef.current.activity.value,
         start_date: formRef.current.startdate.value,
         due_date: formRef.current.duedate.value,
         status: formRef.current.status.value,
       });
+
       navigate(-1);
       console.log("BERHASIL POST DATA");
     } catch (e) {

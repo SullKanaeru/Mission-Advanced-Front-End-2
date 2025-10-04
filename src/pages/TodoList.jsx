@@ -1,16 +1,21 @@
 import { useNavigate } from "react-router";
 import { useGet } from "../hooks/useGet";
 import { useDelete } from "../hooks/useDelete";
+import useTodoList from "../store/useTodolist";
 
 const TodoList = () => {
   const navigate = useNavigate();
-  const { getData, isLoading, isError, refetch } = useGet();
+  const { isLoading, isError, refetch } = useGet();
   const { deleteData, isMutating: isDeleting } = useDelete();
+  const { list } = useTodoList((state) => state);
 
   const handleDelete = async (id) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kegiatan ini?")) {
       try {
+        // Call API service to delete a specific todo item
         await deleteData(id);
+
+        // Refresh the list after deletion
         refetch();
         console.log("Data berhasil dihapus");
       } catch (error) {
@@ -51,8 +56,9 @@ const TodoList = () => {
             </tr>
           </thead>
           <tbody>
-            {getData.map((item, index) => (
-              <tr key={item.id}>
+            {/* Separate items in the list based on their ID */}
+            {list.map((item, index) => (
+              <tr key={index}>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                   {index + 1}
                 </td>
@@ -70,13 +76,13 @@ const TodoList = () => {
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                   <button
-                    onClick={() => navigate(`/edit/${item.id}`)}
+                    onClick={() => navigate(`/edit/${index}`)}
                     style={{ marginRight: "10px" }}
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(index + 1)}
                     disabled={isDeleting}
                     style={{
                       backgroundColor: isDeleting ? "#ccc" : "#dc3545",

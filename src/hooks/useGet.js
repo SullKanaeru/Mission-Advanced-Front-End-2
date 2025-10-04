@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiService } from "../services/apiService";
+import useTodoList from "../store/useTodolist";
 
 export const useGet = () => {
   const [getData, setGetData] = useState([]);
@@ -11,9 +12,14 @@ export const useGet = () => {
       setIsLoading(true);
       setIsError(false);
 
+      // Call the API to get all todo items
       const response = await apiService.getAll();
 
+      // Update the local state with the fetched data
       setGetData(response.data);
+
+      // To debug the response
+      console.log("API GetAll's Response: ", response.data);
     } catch (e) {
       setIsError(true);
       console.log("error: ", e);
@@ -31,6 +37,6 @@ export const useGet = () => {
     setGetData,
     isError,
     isLoading,
-    refetch: fetchData
+    refetch: fetchData,
   };
 };
