@@ -5,10 +5,13 @@ const useTodoList = create(
   persist(
     (set) => ({
       list: [],
-      setList: (data) =>
+      setList: (data) => set({ list: data }),
+
+      addList: (item) =>
         set((state) => ({
-          list: [...state.list, data],
+          list: [...state.list, item],
         })),
+
       updateList: (index, data) =>
         set((state) => {
           const newData = [...state.list];

@@ -5,7 +5,7 @@ import useTodoList from "../store/useTodolist";
 export const useCreate = () => {
   const [isMutating, setIsMutating] = useState(false);
   const [isError, setIsError] = useState(false);
-  const { setList } = useTodoList((state) => state);
+  const { addList } = useTodoList((state) => state);
 
 
   const postData = async (todoData) => {
